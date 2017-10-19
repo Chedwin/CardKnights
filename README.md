@@ -1,4 +1,4 @@
-# CardKnights
+# Card Knights
 
 Author: Edwin Chen
 Date Created: Oct 19, 2017
