@@ -1,88 +1,88 @@
-﻿using System.Collections.Generic;
+﻿using CKInterface;
+
 using System;
+using System.Collections.Generic;
+using DequeUtility;
 using UnityEngine;
 
 
-public sealed class TurnManager : MonoBehaviour
+public sealed class TurnManager
 {
-    public bool switchState = false;
-    public float gameTimer;
-    public int seconds = 0;
-
     public FiniteStateMachine<TurnManager> StateMachine { get; set; }
 
-    Queue<State<TurnManager>> turnQueue = new Queue<State<TurnManager>>();
+    Queue<IState<TurnManager>> turnQueue = new Queue<IState<TurnManager>>();
 
-    void CreateTurnQueue()
-    {
-        PlayerTurn plyTurn = new PlayerTurn("Player");
-        EnemyTurn emTurn1 = new EnemyTurn("Orange box");
-        EnemyTurn emTurn2 = new EnemyTurn("Blue box");
-        EnemyTurn emTurn3 = new EnemyTurn("Purple box");
 
-        turnQueue.Enqueue(plyTurn);
-        turnQueue.Enqueue(emTurn1);
-        turnQueue.Enqueue(emTurn2);
-        turnQueue.Enqueue(emTurn3);
-    }
+    Deque<IState<TurnManager>> turnDequeue = new Deque<IState<TurnManager>>();
 
-    public void AddTurn(ref State<TurnManager> _turn)
-    {
-        //turnQueue.
-    }
-
-    public void GetTurnQueue()
-    {
-        Debug.Log("Turn Queue:");
-
-        int i = 1;
-        foreach (State<TurnManager> st in turnQueue) {
-            Debug.Log(i++ + ": " + st.stateName);
-        }
-    }
-
-    private void Start()
+    public TurnManager()
     {
         StateMachine = new FiniteStateMachine<TurnManager>(this);
-        CreateTurnQueue();
-        StateMachine.ChangeState(turnQueue.Dequeue());
-        gameTimer = Time.time;
     }
 
-    public void AdvanceTurn()
-    {
-        StateMachine.ChangeState(turnQueue.Dequeue());
+    //void ResetTurnQueue()
+    //{
+    //    PlayerTurn plyTurn = new PlayerTurn("Player");
+    //    EnemyTurn emTurn1 = new EnemyTurn("Orange box");
+    //    EnemyTurn emTurn2 = new EnemyTurn("Blue box");
+    //    EnemyTurn emTurn3 = new EnemyTurn("Purple box");
 
-        if (IsTurnQueueEmpty()) {
-            CreateTurnQueue();
-            Debug.Log("Created new turn queue!");
-        }
+    //    turnQueue.Enqueue(plyTurn);
+    //    turnQueue.Enqueue(emTurn1);
+    //    turnQueue.Enqueue(emTurn2);
+    //    turnQueue.Enqueue(emTurn3);
+    //}
+
+
+    public void EnqueueTurn(ref IState<TurnManager> _state)
+    {
+        turnDequeue.AddBack(_state);
     }
 
-    bool IsTurnQueueEmpty()
+    public void AddTurnToFront(ref IState<TurnManager> _state)
     {
-        return (turnQueue.Count == 0);
-    }
-    public State<TurnManager> NextTurn()
-    {
-        if (IsTurnQueueEmpty())
-            CreateTurnQueue();
-
-        return turnQueue.Peek();
+        turnDequeue.AddFront(_state);  
     }
 
-    public string WhoHasNextTurn()
-    {
-        return NextTurn().stateName;
-    }
-    
-    
 
 
-    // Update current turn via StateMachine
-    private void Update()
+
+    //private void Start()
+    //{
+    //    StateMachine = new FiniteStateMachine<TurnManager>(this);
+
+
+    //    turnQueue.Enqueue(new StartBattleTurn());
+    //    ResetTurnQueue();
+    //    StateMachine.ChangeState(turnQueue.Dequeue());
+    //}
+
+    //public void AdvanceTurn()
+    //{
+
+    //    StateMachine.ChangeState(turnQueue.Dequeue());
+    //}
+
+    //bool IsTurnQueueEmpty()
+    //{
+    //    return (turnQueue.Count == 0);
+    //}
+    //public State<TurnManager> NextTurn()
+    //{
+    //    if (IsTurnQueueEmpty())
+    //        ResetTurnQueue();
+
+    //    return turnQueue.Peek();
+    //}
+
+    //public string WhoHasNextTurn()
+    //{
+    //    return NextTurn().stateName;
+    //}
+
+    public void UpdateTurnManager()
     {
-        StateMachine.UpdateState();
+        StateMachine.UpdateState();        
     }
 
 } // end class TurnManager

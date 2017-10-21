@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class CKInputManager : MonoBehaviour
+public class CKInputManager : Singleton<CKInputManager>
 {
     public enum PS4_CTRL {
         SQUARE = 0,
@@ -39,26 +39,6 @@ public class CKInputManager : MonoBehaviour
                 btnKey = ie.inputKey;
         }
         return btnKey;
-    }
-
-
-    public static CKInputManager Instance
-    {
-        get;
-        private set;
-    }
-
-    void Awake()
-    {
-        // First we check if there are any other instances conflicting
-        if (Instance != null && Instance != this)
-        {
-            // If that is the case, we destroy other instances            
-            Destroy(gameObject);
-        }
-
-        // Here we save our singleton instance
-        Instance = this;
     }
 
 } // end class InputManager

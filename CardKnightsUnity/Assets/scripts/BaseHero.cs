@@ -17,6 +17,5 @@ public class BaseHero {
     public float def;
     public float mgc;
 
-    public MeleeWeapon meleeWeapon;
 
 } // end class BaseHero
