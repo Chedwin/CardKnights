@@ -8,11 +8,11 @@ using CKInterface;
 namespace CKFactory
 {
     // GAMESTATE FACTORY
-    public class GameStateFactory : IFactory<IState<CKGameManager>>
+    public class GameStateFactory : ICKFactory<IState<CKGameManager>>
     {
         public GameStateFactory() { }
 
-        public IState<CKGameManager> CreateInstance(CKGameManager.GAME_STATE_TYPE cKGameType)
+        public IState<CKGameManager> CreateGameState(CKGameManager.GAME_STATE_TYPE cKGameType)
         {
             IState<CKGameManager> gameState = null;
             switch (cKGameType)
@@ -26,8 +26,8 @@ namespace CKFactory
                 case CKGameManager.GAME_STATE_TYPE.LOCAL_MAP:
                     gameState = new LocalMapState();
                     break;
-                case CKGameManager.GAME_STATE_TYPE.BATTLE:
-                    gameState = new BattleState();
+                case CKGameManager.GAME_STATE_TYPE.COMBAT:
+                    gameState = new CombatState();
                     break;
                 case CKGameManager.GAME_STATE_TYPE.INGAME_MENU:
                     gameState = new InGameMenuState();

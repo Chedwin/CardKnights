@@ -38,15 +38,16 @@ public class CameraController : MonoBehaviour {
             Cursor.visible = true;
         }
 
-        rightStickX = CKInputManager.Instance.GetCtrlKeyName(CKInputManager.PS4_CTRL.RS_X);
-        rightStickY = CKInputManager.Instance.GetCtrlKeyName(CKInputManager.PS4_CTRL.RS_Y);
-        circleBtn = CKInputManager.Instance.GetCtrlKeyName(CKInputManager.PS4_CTRL.CIRCLE);
+        rightStickX = CKInputManager.Instance.GetCtrlKeyName(PS4Controller.PS4_CTRL_MAP.RS_X);
+        rightStickY = CKInputManager.Instance.GetCtrlKeyName(PS4Controller.PS4_CTRL_MAP.RS_Y);
+        CKInputManager.Instance.SetPS4BtnCtrl(PS4Controller.PS4_CTRL_MAP.CIRCLE, CenterCameraBehindPlayer);
     }
 
-    void CenterCameraBehindPlayer() {
+    float CenterCameraBehindPlayer() {
         Vector3 behindPlayer = Vector3.zero;
         currentRotation = Vector3.SmoothDamp(currentRotation, target.forward, ref behindPlayer, fastSmoothTime);
         transform.position = target.position - transform.forward * distanceFromTarget;
+        return 0.0f;
     }
 
     private void Update()
@@ -54,7 +55,7 @@ public class CameraController : MonoBehaviour {
         
     }
 
-    // Update is called once per frame
+
     void LateUpdate () {
         yaw += Input.GetAxis(rightStickX) * mouseSensitivity;
         pitch -= Input.GetAxis(rightStickY) * mouseSensitivity;
@@ -66,7 +67,5 @@ public class CameraController : MonoBehaviour {
 
         transform.position = target.position - transform.forward * distanceFromTarget;
 
-        if (Input.GetButtonUp(circleBtn))
-            CenterCameraBehindPlayer();
     }
 }
